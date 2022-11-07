@@ -3,6 +3,7 @@ import { THEME } from './src/styles/theme';
 import { useFonts, Roboto_400Regular, Roboto_700Bold, Roboto_500Medium } from '@expo-google-fonts/roboto';
 import { Loading } from './src/components/Loading';
 import { SignIn } from './src/screens/SignIn';
+import { AuthContextProvider } from './src/contexts/AuthContext';
 
 
 export default function App() {
@@ -10,12 +11,15 @@ export default function App() {
 
   return (
     <NativeBaseProvider theme={ THEME }>
-      <StatusBar barStyle='light-content' backgroundColor='transparent' translucent/>
-      {
-        fontsLoaded ? <SignIn /> : <Loading />
-      }
+      <AuthContextProvider>
 
+        <StatusBar barStyle='light-content' backgroundColor='transparent' translucent/>
+        {
+          fontsLoaded ? <SignIn /> : <Loading />
+        }
 
+        
+      </AuthContextProvider>
     </NativeBaseProvider>
     
   );

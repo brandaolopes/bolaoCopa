@@ -1,9 +1,31 @@
-import { Center, Text } from 'native-base';
+import { Center, Text, Image, Icon } from 'native-base';
+import { Button } from '../components/Button';
+import { Fontisto } from '@expo/vector-icons';
+import { useAuth } from '../hooks/useAuth';
+
 
 export function SignIn() {
+    
+    const logo = require('../assets/logo.png');
+
+    const { signIn } = useAuth();
+
     return (
-        <Center flex={1} bgColor="gray.900">
-            <Text color="white" fontSize={24}>Hello! Sign In.</Text>
+        <Center flex={1} bgColor="gray.900" padding={7}>
+            <Image source={logo} alt="logo da aplicação" />
+            <Button 
+                title="Entrar com o Google"
+                type="SECONDARY"
+                leftIcon={<Icon as={Fontisto} color="white" name="google" size="md"/>}
+                marginTop={12}
+                onPress={signIn} 
+            />
+
+            <Text color="white" textAlign="center" marginTop={4}>
+                Não utilizamos nada além do seu endereço{'\n'} de email para a criação da sua conta
+            </Text>
+                
+                
         </Center>
     )
 }
