@@ -2,7 +2,7 @@ import { NativeBaseProvider, StatusBar } from 'native-base';
 import { THEME } from './src/styles/theme';
 import { useFonts, Roboto_400Regular, Roboto_700Bold, Roboto_500Medium } from '@expo-google-fonts/roboto';
 import { Loading } from './src/components/Loading';
-import { SignIn } from './src/screens/SignIn';
+import { Pools } from './src/screens/Pools';
 import { AuthContextProvider } from './src/contexts/AuthContext';
 
 
@@ -15,7 +15,7 @@ export default function App() {
 
         <StatusBar barStyle='light-content' backgroundColor='transparent' translucent/>
         {
-          fontsLoaded ? <SignIn /> : <Loading />
+          fontsLoaded ? <Pools /> : <Loading />
         }
 
         
