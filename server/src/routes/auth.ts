@@ -7,7 +7,7 @@ export async function authRoutes(fastify: FastifyInstance) {
 
     fastify.get('/me', 
         {
-            //midleware de vai definir quais rotas serão acessiveis só com autenticação
+            //midleware que vai definir quais rotas serão acessiveis só com autenticação
             onRequest: [autenthicate]
         },
         async (request) => {
