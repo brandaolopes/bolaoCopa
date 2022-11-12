@@ -160,7 +160,7 @@ export async function poolRoutes(fastify: FastifyInstance) {
         })
 
         //visualizar informacoes do bolao
-        fastify.get('pools/:id', {
+        fastify.get('/pools/:id', {
             onRequest: [autenthicate]
         }, async (request) => {
             const getPoolParams = Zod.object({
