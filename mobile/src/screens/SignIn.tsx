@@ -8,7 +8,7 @@ export function SignIn() {
     
     const logo = require('../assets/logo.png');
 
-    const { signIn } = useAuth();
+    const { signIn, isUserLoading } = useAuth();
 
     return (
         <Center flex={1} bgColor="gray.900" padding={7}>
@@ -18,7 +18,9 @@ export function SignIn() {
                 type="SECONDARY"
                 leftIcon={<Icon as={Fontisto} color="white" name="google" size="md"/>}
                 marginTop={12}
-                onPress={signIn} 
+                onPress={signIn}
+                isLoading={isUserLoading}
+                _loading={{ _spinner: { color: 'white' }}} 
             />
 
             <Text color="white" textAlign="center" marginTop={4}>
