@@ -109,7 +109,9 @@ export async function poolRoutes(fastify: FastifyInstance) {
                 }
             })
 
-            return reply.status(201).send()
+            return reply.status(201).send({
+                message: `${pool.title}`
+            })
 
         })
 
