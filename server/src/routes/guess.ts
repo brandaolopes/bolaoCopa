@@ -9,7 +9,7 @@ export async function guessRoutes(fastify: FastifyInstance) {
          return {count}
      })
 
-     fastify.post('/pool/:poolId/games/:gameId/guesses', {
+    fastify.post('/pools/:poolId/games/:gameId/guesses', {
         onRequest: [autenthicate]
      }, async (request, reply) => {
         const createGuessParams = Zod.object({

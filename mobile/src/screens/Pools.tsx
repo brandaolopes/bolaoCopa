@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import { BackHandler, Alert } from 'react-native';
 import { VStack, Icon, useToast, FlatList } from "native-base";
 import { Button } from "../components/Button";
 import { Header } from "../components/Header";
@@ -9,6 +10,7 @@ import { Octicons } from '@expo/vector-icons';
 import { api } from '../services/api';
 
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { useAuth } from '../hooks/useAuth';
 
 
 export function Pools() {
@@ -40,13 +42,42 @@ export function Pools() {
         }
     }
 
+    async function handleLogOut() {
+        api.defaults.headers.common['Authorization'] = ''
+        //achar forma de redirecionar para o login
+        BackHandler.exitApp()
+    }
+
+    function handleLogOutPrompt() {
+        try {
+
+           Alert.alert('Atenção!', 'Tem certeza que quer sair do aplicativo?', [
+                {
+                    text: 'Cancelar',
+                    onPress: () => null,
+                    style: 'cancel',
+                },
+                { 
+                    text: 'Sair!', 
+                    onPress: () => {handleLogOut()},
+                    style: 'default' },
+                ],
+                {
+                    cancelable: true,
+                });
+        
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     useFocusEffect(useCallback(() => {
         fetchPools();
     }, []))
 
     return (
         <VStack flex={1} bgColor="gray.900">
-            <Header title="Meus Bolões" />
+            <Header title="Meus Bolões" showLogoutButton signOut={handleLogOutPrompt}/>
 
             <VStack mt={6} mx={5} borderBottomWidth={1} borderBottomColor="gray.600" pb={4} mb={4}>
                 <Button 

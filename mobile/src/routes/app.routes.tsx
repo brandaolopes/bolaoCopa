@@ -8,6 +8,7 @@ import { Find } from '../screens/Find';
 import { Details } from '../screens/Details';
 
 
+
 const { Navigator, Screen } = createBottomTabNavigator();
 
 export function AppRoutes() {
@@ -61,9 +62,11 @@ export function AppRoutes() {
                 name='details'
                 component={Details}
                 options={{
-                    tabBarButton: () => null
+                    tabBarButton: () => null,
                 }}
+                
             />
+            
         </Navigator>
     );
 }
