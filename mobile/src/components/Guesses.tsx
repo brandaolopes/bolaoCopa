@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { useToast, FlatList } from 'native-base';
+import { ToastAndroid } from 'react-native';
+import { FlatList } from 'native-base';
 import { api } from '../services/api';
 import { Game, GameProps } from '../components/Game';
-import { getName } from 'country-list';
 import { Loading } from './Loading';
 import { EmptyMyPoolList } from './EmptyMyPoolList';
 
@@ -14,12 +14,11 @@ interface Props {
 
 export function Guesses({ poolId, code }: Props) {
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [games, setGames] = useState<GameProps[]>([]);
   const [firstTeamPoints, setFirstTeamPoints] = useState('');
   const [secondTeamPoints, setSecondTeamPoints] = useState('');
 
-  const toast = useToast();
 
   async function fetchGames() {
     try {
@@ -27,12 +26,8 @@ export function Guesses({ poolId, code }: Props) {
       setGames(response.data.games)
     } catch (error) {
       console.log(error)
+      ToastAndroid.showWithGravity("Não foi possível obter os dados do bolão", ToastAndroid.LONG, ToastAndroid.CENTER);
 
-      toast.show({
-          title: 'Ops... Não foi possível obter os dados do bolão. Tente novamente',
-          position: 'top',
-          bgColor: 'red.500',
-      })
   } finally {
       setIsLoading(false)
   }
@@ -41,46 +36,40 @@ export function Guesses({ poolId, code }: Props) {
 
   async function handleGuessConfirm(gameId: string) {
     try {
-      setIsLoading(true)
+      
       if (!firstTeamPoints.trim() || !secondTeamPoints.trim()) {
-        return toast.show({
-          title: 'Ops... É preciso informar o placar do palpite',
-          position: 'top',
-          bgColor: 'red.500',
-        })
+        return ToastAndroid.showWithGravity("É preciso informar o placar do seu palpite", ToastAndroid.LONG, ToastAndroid.CENTER);
       }
-
+      setIsLoading(true)
       const response = await api.post(`/pools/${poolId}/games/${gameId}/guesses`, {
         firstTeamPoints: Number(firstTeamPoints),
         secondTeamPoints: Number(secondTeamPoints),
       } );
 
-      if (response.status === 200) {
-        toast.show({
-          title: 'Palpite enviado com sucesso!',
-          position: 'top',
-          bgColor: 'green.500',
-        })
+      if (response.status === 201) {
+        ToastAndroid.showWithGravity("Palpite enviado com sucesso!", ToastAndroid.LONG, ToastAndroid.CENTER);
       }
 
-      setIsLoading(false)
       fetchGames();
       
 
     } catch (error) {
       console.log(error)
 
-      toast.show({
-          title: 'Ops... Não foi possível confirmar o seu palpite.',
-          position: 'top',
-          bgColor: 'red.500',
-      })
+      ToastAndroid.showWithGravity("Não foi possível confirmar o seu palpite...", ToastAndroid.LONG, ToastAndroid.CENTER);
     }
+  }
+
+  async function handleCalcPoints(gameId: string) {
+    //pegar resultado do jogo e comparar com o palpite. depois enviar pontuação para o banco
+    
+    ToastAndroid.showWithGravity("Pontuação atualizada com sucesso!", ToastAndroid.LONG, ToastAndroid.CENTER);
+    
   }
 
   useEffect(() => {
     fetchGames();
-  }, [poolId])
+  }, [])
 
 
   if (isLoading) {
@@ -100,7 +89,8 @@ export function Guesses({ poolId, code }: Props) {
             data={item}
             setFirstTeamPoints={setFirstTeamPoints}
             setSecondTeamPoints={setSecondTeamPoints}
-            onGuessConfirm={() => {handleGuessConfirm(item.id)}}
+            onGuessConfirm={() => handleGuessConfirm(item.id)}
+            onCalcPoints={() => handleCalcPoints(item.id)}
           />
         )}
       />

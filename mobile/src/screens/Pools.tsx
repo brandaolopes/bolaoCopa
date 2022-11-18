@@ -10,7 +10,7 @@ import { Octicons } from '@expo/vector-icons';
 import { api } from '../services/api';
 
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { useAuth } from '../hooks/useAuth';
+
 
 
 export function Pools() {
@@ -60,7 +60,7 @@ export function Pools() {
                 { 
                     text: 'Sair!', 
                     onPress: () => {handleLogOut()},
-                    style: 'default' },
+                    style: 'destructive' },
                 ],
                 {
                     cancelable: true,

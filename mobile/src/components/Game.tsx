@@ -1,5 +1,6 @@
-import { Button, HStack, Text, useTheme, VStack } from 'native-base';
-import { X, Check } from 'phosphor-react-native';
+import { TouchableOpacity } from 'react-native';
+import { HStack, Text, useTheme, VStack, Box } from 'native-base';
+import { X } from 'phosphor-react-native';
 import { getName } from 'country-list';
 import dayJS from 'dayjs';
 import ptBR from 'dayjs/locale/pt-br';
@@ -13,6 +14,7 @@ interface GuessProps {
   participantId: string;
   firstTeamPoints: number;
   secondTeamPoints: number;
+  guessResultPoints?: number | null;
 }
 
 export interface GameProps {
@@ -20,17 +22,20 @@ export interface GameProps {
   date: string;
   firstTeamCountryCode: string;
   secondTeamCountryCode: string;
+  firstTeamResultPoints: number;
+  secondTeamResultPoints: number;
   guess: null | GuessProps;
 }
 
 interface Props {
   data: GameProps;
   onGuessConfirm: () => void;
+  onCalcPoints: () => void;
   setFirstTeamPoints: (value: string) => void;
   setSecondTeamPoints: (value: string) => void;
 }
 
-export function Game({ data, setFirstTeamPoints, setSecondTeamPoints, onGuessConfirm }: Props) {
+export function Game({ data, setFirstTeamPoints, setSecondTeamPoints, onGuessConfirm, onCalcPoints }: Props) {
   const { colors, sizes } = useTheme();
 
   const when = dayJS(data.date).locale(ptBR).format("DD [de] MMMM [de] YYYY [às] HH:00[h]")
@@ -47,7 +52,7 @@ export function Game({ data, setFirstTeamPoints, setSecondTeamPoints, onGuessCon
       p={4}
     >
       <Text color="gray.100" fontFamily="heading" fontSize="sm">
-        {getName(data.firstTeamCountryCode)} vs. {getName(data.secondTeamCountryCode)}
+        {getName(data.firstTeamCountryCode)} {data.firstTeamResultPoints} X {data.secondTeamResultPoints} {getName(data.secondTeamCountryCode)}
       </Text>
 
       <Text color="gray.200" fontSize="xs">
@@ -70,18 +75,34 @@ export function Game({ data, setFirstTeamPoints, setSecondTeamPoints, onGuessCon
         />
       </HStack>
 
-      {
-        !data.guess &&
-        <Button size="xs" w="full" bgColor="green.500" mt={4} onPress={onGuessConfirm}>
-          <HStack alignItems="center">
-            <Text color="white" fontSize="xs" fontFamily="heading" mr={3}>
-              CONFIRMAR PALPITE
-            </Text>
+      {!data.guess ? (
+        
+          <TouchableOpacity onPress={onGuessConfirm}>
+            <HStack alignItems="center">
+              <Box mt={4} rounded="md" p={2} 
+                bgColor="green.500"
+                _text={{ fontSize: 'xs', fontFamily: "heading" , color: 'white' }}>
+                CONFIRMAR PALPITE
+              </Box>
 
-            <Check color={colors.white} size={sizes[4]} />
-          </HStack>
-        </Button>
-      }
+              
+            </HStack>
+          </TouchableOpacity>
+        
+      ) : !data.guess.guessResultPoints ? 
+      (
+      
+        <TouchableOpacity onPress={onCalcPoints}>
+          <Box w="full" mt={4} rounded="md" p={2} 
+            bgColor="yellow.500"
+            _text={{ fontSize: 'xs', fontFamily: "heading" , color: 'gray.800' }}>
+            CALCULAR PONTUAÇÃO {console.log(data.guess)}
+          </Box>
+        </TouchableOpacity>
+      
+      ) : <Text color="gray.100" fontFamily="heading" fontSize="sm" >Sua pontuação: {data.guess.guessResultPoints}</Text>}
+
+
     </VStack>
   );
 }
