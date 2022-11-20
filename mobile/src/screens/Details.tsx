@@ -12,7 +12,7 @@ import { PoolHeader } from '../components/PoolHeader';
 import { EmptyMyPoolList } from '../components/EmptyMyPoolList';
 import { Option } from '../components/Option';
 import { Guesses } from '../components/Guesses';
-import { EmptyRakingList } from '../components/EmptyRakingList';
+import { Ranking } from '../components/Ranking';
 
 interface RouteParams {
     id: string;
@@ -83,9 +83,9 @@ export function Details() {
                         <Option title='Ranking do grupo' isSelected={optionSelected === 'ranking'} onPress={() => setOptionSelected('ranking')}/>
                     </HStack>
 
-                    {optionSelected === 'guesses' ? <Guesses poolId={poolDetails.id} code={poolDetails.code}/> : <EmptyRakingList />}
+                    {optionSelected === 'guesses' ? <Guesses poolId={poolDetails.id} code={poolDetails.code}/> : <Ranking poolId={poolDetails.id}/> }
                     
-
+                    
                 </VStack> : <EmptyMyPoolList code={poolDetails.code}/>
             }
         </VStack>

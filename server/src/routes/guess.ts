@@ -92,52 +92,78 @@ export async function guessRoutes(fastify: FastifyInstance) {
 
      })
 
-    //retorna todos os palpites que um usuario enviou dentro de um bolao
-    fastify.get(`/pools/:poolId/participant/:participantId/guesses`, {
+    //retorna soma da pontuação de todos os palpites que os usuarios enviaram dentro de um bolao
+    fastify.get(`/pools/:poolId/participants/guesses`, {
         onRequest: [autenthicate]
     } , async (request, reply) => {
         const createRequestParams = Zod.object({
             poolId: Zod.string(),
-            participantId: Zod.string(),
+            
         })
 
-        const { poolId, participantId } = createRequestParams.parse(request.params)
-
+        const { poolId } = createRequestParams.parse(request.params)
         
-        if (participantId === request.user.sub) {
-            const participant = await prisma.participant.findUnique({
-                where: {
-                    userId_poolId: {
-                        poolId,
-                        userId: request.user.sub,
-                    }
-                }
-            })
-            
-    
-            if (!participant) {
-                return reply.status(400).send({
-                    message: 'User do not participate of this poll',
-                })
+        const pool = await prisma.pool.findUnique({
+            where: {
+                id: poolId,
+            },
+            //inclui dados dos participantes
+            include: {
+                participants: {
+                    select: {
+                        id: true,
+
+                        user: {
+                            select: {
+                                avatarUrl: true,
+                                name: true,
+                            }
+                        },
+
+                        guesses: {
+                            select: {
+                                guessResultPoints: true,
+
+                            },
+                        }
+                    },
+
+                },
             }
-    
-            const participantGuesses = await prisma.guess.findMany({
-                where: {
-                    participantId: participant.id,
-                }
-            })
-    
-            return { participantGuesses }
-        } else {
-            return reply.status(400).send({
-                message: 'It was not possible to find guesses'
-            })
-        }
+
+        })
+
+        return pool 
 
 
     })
 
-    //salva pontuação obtida para aquele palpite
-    fastify.put(`/pools/`, {}, () => {}) 
+    //salva pontuação obtida para um palpite
+    fastify.put(`/guess/:id`, {
+        onRequest: [autenthicate]
+    }, async (request, reply) => {
+        const createGuessParams = Zod.object({
+            id: Zod.string(),
+        })
+
+        const createGuessBody = Zod.object({
+            guessResultPoints: Zod.number(),
+        })
+
+        const { id } = createGuessParams.parse(request.params)
+
+        const { guessResultPoints } = createGuessBody.parse(request.body)
+
+        await prisma.guess.update({
+            where: {
+                id: id
+            },
+            data: {
+                guessResultPoints: guessResultPoints
+            }
+        })
+
+        return reply.status(201).send();
+    }) 
 
 }

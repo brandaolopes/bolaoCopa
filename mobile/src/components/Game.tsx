@@ -96,7 +96,7 @@ export function Game({ data, setFirstTeamPoints, setSecondTeamPoints, onGuessCon
           <Box w="full" mt={4} rounded="md" p={2} 
             bgColor="yellow.500"
             _text={{ fontSize: 'xs', fontFamily: "heading" , color: 'gray.800' }}>
-            CALCULAR PONTUAÇÃO {console.log(data.guess)}
+            CALCULAR PONTUAÇÃO
           </Box>
         </TouchableOpacity>
       

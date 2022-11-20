@@ -60,16 +60,132 @@ export function Guesses({ poolId, code }: Props) {
     }
   }
 
+
   async function handleCalcPoints(gameId: string) {
-    //pegar resultado do jogo e comparar com o palpite. depois enviar pontuação para o banco
+
+    try {
+      setIsLoading(true)
+      const game = games.find(game => game.id === gameId)
+      
+      //acertou o placar
+      if (game.firstTeamResultPoints === game.guess.firstTeamPoints && game.secondTeamResultPoints === game.guess.secondTeamPoints) {
+        const response = await api.put(`/guess/${game.guess.id}`, {
+          guessResultPoints: 25
+        } )
+
+        if (response.status === 201) {
+          ToastAndroid.showWithGravity("Pontuação atualizada com sucesso!", ToastAndroid.LONG, ToastAndroid.CENTER);
+        }
+  
+        fetchGames();
+
+        return
+      }
+
+      //acertou a pontuação do vencedor
+      if (game.firstTeamResultPoints > game.secondTeamResultPoints || game.secondTeamResultPoints > game.firstTeamResultPoints) {
+        if (game.firstTeamResultPoints > game.secondTeamResultPoints && game.guess.firstTeamPoints === game.firstTeamResultPoints) {
+          const response = await api.put(`/guess/${game.guess.id}`, {
+            guessResultPoints: 18
+          } )
+  
+          if (response.status === 201) {
+            ToastAndroid.showWithGravity("Pontuação atualizada com sucesso!", ToastAndroid.LONG, ToastAndroid.CENTER);
+          }
     
-    ToastAndroid.showWithGravity("Pontuação atualizada com sucesso!", ToastAndroid.LONG, ToastAndroid.CENTER);
+          fetchGames();
+  
+          return
+        }
+
+        if (game.secondTeamResultPoints > game.firstTeamResultPoints && game.guess.secondTeamPoints === game.secondTeamResultPoints) {
+          const response = await api.put(`/guess/${game.guess.id}`, {
+            guessResultPoints: 18
+          } )
+  
+          if (response.status === 201) {
+            ToastAndroid.showWithGravity("Pontuação atualizada com sucesso!", ToastAndroid.LONG, ToastAndroid.CENTER);
+          }
+    
+          fetchGames();
+  
+          return
+        }
+      }
+
+      //acertou o resultado empate
+      if (game.secondTeamResultPoints === game.firstTeamResultPoints && game.guess.secondTeamPoints === game.guess.firstTeamPoints) {
+        const response = await api.put(`/guess/${game.guess.id}`, {
+          guessResultPoints: 10
+        } )
+
+        if (response.status === 201) {
+          ToastAndroid.showWithGravity("Pontuação atualizada com sucesso!", ToastAndroid.LONG, ToastAndroid.CENTER);
+        }
+  
+        fetchGames();
+
+        return
+      }
+
+      //acertou somente o vencedor
+      if (game.firstTeamResultPoints > game.secondTeamResultPoints || game.secondTeamResultPoints > game.firstTeamResultPoints) {
+        if (game.firstTeamResultPoints > game.secondTeamResultPoints && game.guess.firstTeamPoints > game.guess.secondTeamPoints) {
+          const response = await api.put(`/guess/${game.guess.id}`, {
+            guessResultPoints: 15
+          } )
+  
+          if (response.status === 201) {
+            ToastAndroid.showWithGravity("Pontuação atualizada com sucesso!", ToastAndroid.LONG, ToastAndroid.CENTER);
+          }
+    
+          fetchGames();
+  
+          return
+        }
+
+        if (game.secondTeamResultPoints > game.firstTeamResultPoints && game.guess.secondTeamPoints > game.guess.firstTeamPoints) {
+          const response = await api.put(`/guess/${game.guess.id}`, {
+            guessResultPoints: 15
+          } )
+  
+          if (response.status === 201) {
+            ToastAndroid.showWithGravity("Pontuação atualizada com sucesso!", ToastAndroid.LONG, ToastAndroid.CENTER);
+          }
+    
+          fetchGames();
+  
+          return
+        }
+        
+      } else {
+        const response = await api.put(`/guess/${game.guess.id}`, {
+          guessResultPoints: 0
+        } )
+
+        if (response.status === 201) {
+          ToastAndroid.showWithGravity("Pontuação atualizada com sucesso!", ToastAndroid.LONG, ToastAndroid.CENTER);
+        }
+  
+        fetchGames();
+
+        return
+      }
+
+
+    } catch (error) {
+        console.log(error)
+        ToastAndroid.showWithGravity("Não foi possível atualizar sua pontuação", ToastAndroid.LONG, ToastAndroid.CENTER);
+    } finally {
+        setIsLoading(false)
+    }
+    
     
   }
 
   useEffect(() => {
     fetchGames();
-  }, [])
+  }, [poolId])
 
 
   if (isLoading) {
