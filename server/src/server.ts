@@ -1,3 +1,4 @@
+import * as dotenv from 'dotenv';
 import Fastify from "fastify";
 import { PrismaClient } from "@prisma/client";
 import cors from '@fastify/cors';
@@ -8,11 +9,17 @@ import { guessRoutes } from "./routes/guess";
 import { gameRoutes } from "./routes/game";
 import { authRoutes } from "./routes/auth";
 
+
+dotenv.config();
+
+
 const prisma = new PrismaClient({
     log: ['query'],
 })
 
 async function bootstap() {
+
+
 
     const fastify = Fastify({
         logger: true,
@@ -25,7 +32,7 @@ async function bootstap() {
 
     // em produção deverá ser uma variável de ambiente
     await fastify.register(jwt, {
-        secret: 'minhaSenhaSecreta',
+        secret: `${process.env.JWT_SECRET_KEY}`,
     } )
 
     await fastify.register(poolRoutes)

@@ -1,10 +1,13 @@
 {
-  "name": "server",
+  "name": "serverbolao",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx watch src/server.ts"
+    "start": "node ./src/server.js",
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc --build",
+    "clean": "tsc --build --clean"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +26,7 @@
     "@fastify/cors": "^8.1.1",
     "@fastify/jwt": "^6.3.2",
     "@prisma/client": "^4.5.0",
+    "dotenv": "^16.0.3",
     "fastify": "^4.9.2",
     "short-unique-id": "^4.4.4",
     "zod": "^3.19.1"
