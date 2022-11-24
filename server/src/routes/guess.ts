@@ -133,8 +133,57 @@ export async function guessRoutes(fastify: FastifyInstance) {
 
         })
 
-        return pool 
+        return { pool } 
 
+
+    })
+
+//retorna soma da pontuação de todos os palpites que um usuario enviou dentro de um bolao
+    fastify.get('/pools/:poolId/participant/guesses', {
+        onRequest: [autenthicate]
+    }, async (request, reply) => {
+
+        const createRequestParams = Zod.object({
+            poolId: Zod.string(),
+            
+        })
+
+        const { poolId } = createRequestParams.parse(request.params)
+
+        const participant = await prisma.participant.findUnique({
+            where: {
+                userId_poolId: {
+                    poolId,
+                    userId: request.user.sub,
+                }
+            }
+        })
+        
+
+        if (!participant) {
+            return reply.status(400).send({
+                message: 'User do not participate of this poll',
+            })
+        } 
+
+        const participantGuesses = await prisma.guess.findMany({
+            where: {
+                participantId: participant.id,
+            }
+        })
+
+        if (participantGuesses) {
+            const totalPoints = participantGuesses.map(item => item.guessResultPoints).reduce((prev: number, next: number) => prev + next);
+
+            if (!totalPoints) {
+                return reply.status(400).send({
+                    message: 'It was not possible to find guesses'
+                })
+            }
+            
+            return { totalPoints }
+
+        }
 
     })
 
