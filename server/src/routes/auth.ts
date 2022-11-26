@@ -3,7 +3,10 @@ import Zod from "zod"
 import { prisma } from "../lib/prisma"
 import { autenthicate } from "../plugins/authenticate"
 
+
 export async function authRoutes(fastify: FastifyInstance) {
+
+    const fetch = require('node-fetch')
 
     fastify.get('/me', 
         {

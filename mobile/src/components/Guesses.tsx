@@ -67,98 +67,102 @@ export function Guesses({ poolId, code }: Props) {
       setIsLoading(true)
       const game = games.find(game => game.id === gameId)
       
-      //acertou o placar
-      if (game.firstTeamResultPoints === game.guess.firstTeamPoints && game.secondTeamResultPoints === game.guess.secondTeamPoints) {
-        const response = await api.put(`/guess/${game.guess.id}`, {
-          guessResultPoints: 25
-        } )
-
-        if (response.status === 201) {
-          ToastAndroid.showWithGravity("Pontuação atualizada com sucesso!", ToastAndroid.LONG, ToastAndroid.CENTER);
-        }
-  
-        fetchGames();
-
-        return
-      }
-
-      //acertou a pontuação do vencedor
-      if (game.firstTeamResultPoints > game.secondTeamResultPoints || game.secondTeamResultPoints > game.firstTeamResultPoints) {
-        if (game.firstTeamResultPoints > game.secondTeamResultPoints && game.guess.firstTeamPoints === game.firstTeamResultPoints) {
-          const response = await api.put(`/guess/${game.guess.id}`, {
-            guessResultPoints: 18
-          } )
-  
-          if (response.status === 201) {
-            ToastAndroid.showWithGravity("Pontuação atualizada com sucesso!", ToastAndroid.LONG, ToastAndroid.CENTER);
-          }
-    
-          fetchGames();
-  
-          return
-        }
-
-        if (game.secondTeamResultPoints > game.firstTeamResultPoints && game.guess.secondTeamPoints === game.secondTeamResultPoints) {
-          const response = await api.put(`/guess/${game.guess.id}`, {
-            guessResultPoints: 18
-          } )
-  
-          if (response.status === 201) {
-            ToastAndroid.showWithGravity("Pontuação atualizada com sucesso!", ToastAndroid.LONG, ToastAndroid.CENTER);
-          }
-    
-          fetchGames();
-  
-          return
-        }
-      }
-
-      //acertou o resultado empate
-      if (game.secondTeamResultPoints === game.firstTeamResultPoints && game.guess.secondTeamPoints === game.guess.firstTeamPoints) {
-        const response = await api.put(`/guess/${game.guess.id}`, {
-          guessResultPoints: 10
-        } )
-
-        if (response.status === 201) {
-          ToastAndroid.showWithGravity("Pontuação atualizada com sucesso!", ToastAndroid.LONG, ToastAndroid.CENTER);
-        }
-  
-        fetchGames();
-
-        return
-      }
-
-      //acertou somente o vencedor
-      if (game.firstTeamResultPoints > game.secondTeamResultPoints || game.secondTeamResultPoints > game.firstTeamResultPoints) {
-        if (game.firstTeamResultPoints > game.secondTeamResultPoints && game.guess.firstTeamPoints > game.guess.secondTeamPoints) {
-          const response = await api.put(`/guess/${game.guess.id}`, {
-            guessResultPoints: 15
-          } )
-  
-          if (response.status === 201) {
-            ToastAndroid.showWithGravity("Pontuação atualizada com sucesso!", ToastAndroid.LONG, ToastAndroid.CENTER);
-          }
-    
-          fetchGames();
-  
-          return
-        }
-
-        if (game.secondTeamResultPoints > game.firstTeamResultPoints && game.guess.secondTeamPoints > game.guess.firstTeamPoints) {
-          const response = await api.put(`/guess/${game.guess.id}`, {
-            guessResultPoints: 15
-          } )
-  
-          if (response.status === 201) {
-            ToastAndroid.showWithGravity("Pontuação atualizada com sucesso!", ToastAndroid.LONG, ToastAndroid.CENTER);
-          }
-    
-          fetchGames();
-  
-          return
-        }
+      if (game.guess && game.firstTeamResultPoints) {
         
-      } else {
+          //acertou o placar
+          if (game.firstTeamResultPoints === game.guess.firstTeamPoints && game.secondTeamResultPoints === game.guess.secondTeamPoints) {
+            const response = await api.put(`/guess/${game.guess.id}`, {
+              guessResultPoints: 25
+            } )
+
+            if (response.status === 201) {
+              ToastAndroid.showWithGravity("Pontuação atualizada com sucesso!", ToastAndroid.LONG, ToastAndroid.CENTER);
+            }
+      
+            fetchGames();
+
+            return
+          }
+
+          //acertou a pontuação do vencedor
+          if (game.firstTeamResultPoints > game.secondTeamResultPoints || game.secondTeamResultPoints > game.firstTeamResultPoints) {
+            if (game.firstTeamResultPoints > game.secondTeamResultPoints && game.guess.firstTeamPoints === game.firstTeamResultPoints) {
+              const response = await api.put(`/guess/${game.guess.id}`, {
+                guessResultPoints: 18
+              } )
+      
+              if (response.status === 201) {
+                ToastAndroid.showWithGravity("Pontuação atualizada com sucesso!", ToastAndroid.LONG, ToastAndroid.CENTER);
+              }
+        
+              fetchGames();
+      
+              return
+            }
+
+            if (game.secondTeamResultPoints > game.firstTeamResultPoints && game.guess.secondTeamPoints === game.secondTeamResultPoints) {
+              const response = await api.put(`/guess/${game.guess.id}`, {
+                guessResultPoints: 18
+              } )
+      
+              if (response.status === 201) {
+                ToastAndroid.showWithGravity("Pontuação atualizada com sucesso!", ToastAndroid.LONG, ToastAndroid.CENTER);
+              }
+        
+              fetchGames();
+      
+              return
+            }
+          }
+
+          //acertou o resultado empate
+          if (game.secondTeamResultPoints === game.firstTeamResultPoints && game.guess.secondTeamPoints === game.guess.firstTeamPoints) {
+            const response = await api.put(`/guess/${game.guess.id}`, {
+              guessResultPoints: 10
+            } )
+
+            if (response.status === 201) {
+              ToastAndroid.showWithGravity("Pontuação atualizada com sucesso!", ToastAndroid.LONG, ToastAndroid.CENTER);
+            }
+      
+            fetchGames();
+
+            return
+          }
+
+          //acertou somente o vencedor
+          if (game.firstTeamResultPoints > game.secondTeamResultPoints || game.secondTeamResultPoints > game.firstTeamResultPoints) {
+            if (game.firstTeamResultPoints > game.secondTeamResultPoints && game.guess.firstTeamPoints > game.guess.secondTeamPoints) {
+              const response = await api.put(`/guess/${game.guess.id}`, {
+                guessResultPoints: 15
+              } )
+      
+              if (response.status === 201) {
+                ToastAndroid.showWithGravity("Pontuação atualizada com sucesso!", ToastAndroid.LONG, ToastAndroid.CENTER);
+              }
+        
+              fetchGames();
+      
+              return
+            }
+
+            if (game.secondTeamResultPoints > game.firstTeamResultPoints && game.guess.secondTeamPoints > game.guess.firstTeamPoints) {
+              const response = await api.put(`/guess/${game.guess.id}`, {
+                guessResultPoints: 15
+              } )
+      
+              if (response.status === 201) {
+                ToastAndroid.showWithGravity("Pontuação atualizada com sucesso!", ToastAndroid.LONG, ToastAndroid.CENTER);
+              }
+        
+              fetchGames();
+      
+              return
+            }
+            
+          }
+          
+        //não acertou nada.
         const response = await api.put(`/guess/${game.guess.id}`, {
           guessResultPoints: 0
         } )
@@ -166,12 +170,14 @@ export function Guesses({ poolId, code }: Props) {
         if (response.status === 201) {
           ToastAndroid.showWithGravity("Pontuação atualizada com sucesso!", ToastAndroid.LONG, ToastAndroid.CENTER);
         }
-  
+
         fetchGames();
 
         return
-      }
 
+      }
+      
+      ToastAndroid.showWithGravity("Você não enviou palpites para este jogo.", ToastAndroid.LONG, ToastAndroid.CENTER);
 
     } catch (error) {
         console.log(error)
@@ -209,6 +215,7 @@ export function Guesses({ poolId, code }: Props) {
             onCalcPoints={() => handleCalcPoints(item.id)}
           />
         )}
+        _contentContainerStyle={{ pb: 20}}
       />
     
   );
