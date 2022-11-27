@@ -216,6 +216,7 @@ export function Guesses({ poolId, code }: Props) {
           />
         )}
         _contentContainerStyle={{ pb: 20}}
+        
       />
     
   );

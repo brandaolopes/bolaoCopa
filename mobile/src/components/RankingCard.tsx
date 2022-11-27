@@ -1,12 +1,13 @@
 import { Avatar, Heading, HStack, Text, VStack, Box } from 'native-base';
+import { Medal } from 'phosphor-react-native';
 
 
 interface RankingCardProps {
-    id: string;
-    name: string;
-    avatarUrl: string;
+    id?: string;
+    name?: string;
+    avatarUrl?: string;
     points: number;
-    position: number;
+    position?: number;
 }
 
 
@@ -15,20 +16,20 @@ export function RankingCard({id, name, avatarUrl, points, position}: RankingCard
     return (
         <HStack
             w="full"
-            h={20}
+            h={16}
             bgColor="gray.800"
             borderBottomWidth={3}
             borderBottomColor="yellow.500"
             justifyContent="space-between"
             alignItems="center"
             rounded="sm"
-            mb={3}
-            p={4}
+            mb={1}
+            p={2}
         >
             <HStack alignItems="center" justifyContent="space-between" flex={1}>
                 <HStack>
                     <Avatar
-                        source={{ uri: 'https://github.com/brandaolopes.png'}}
+                        source={{ uri: avatarUrl }}
                         w={12}
                         h={12}
                         rounded="full"
@@ -38,26 +39,39 @@ export function RankingCard({id, name, avatarUrl, points, position}: RankingCard
                     />
                     <VStack>
                         <Heading color="white" fontSize="md" mt={2} fontFamily="heading">
-                            Bruno
+                            {name}
                         </Heading>
 
                         <Text color="gray.200" fontSize="sm">
-                            40 ponto(s)
+                            {points} ponto(s)
                         </Text>
                     </VStack>
                 </HStack>
+                {position ? (
+                    <Box
+                        
+                        bgColor="yellow.500" 
+                        rounded={"full"} 
+                        w={8} h={6} 
+                        alignItems="center" 
+                        _text={{fontSize: "sm",
+                            fontWeight: "bold",
+                            color: "gray.800",}}
+                    >
+                        {position}º
+                    </Box>
+                ) : (
                 <Box
                      
                     bgColor="yellow.500" 
                     rounded={"full"} 
-                    w={8} h={6} 
+                    w={8} h={8} 
                     alignItems="center" 
-                    _text={{fontSize: "sm",
-                        fontWeight: "bold",
-                        color: "gray.800",}}
+                    justifyContent="center"
                 >
-                    1º
+                    <Medal color='gray' size={22} />
                 </Box>
+                )}
             </HStack>
         </HStack>
     )

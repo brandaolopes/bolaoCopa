@@ -3,9 +3,10 @@ import { New } from '../screens/New';
 import { Pools } from '../screens/Pools';
 import { useTheme } from 'native-base';
 import { Platform } from 'react-native';
-import { PlusCircle, SoccerBall } from 'phosphor-react-native';
+import { PlusCircle, SoccerBall, Info } from 'phosphor-react-native';
 import { Find } from '../screens/Find';
 import { Details } from '../screens/Details';
+import { InfoScreen } from '../screens/InfoScreen';
 
 
 
@@ -30,9 +31,19 @@ export function AppRoutes() {
             tabBarItemStyle: {
                 position: 'relative',
                 top: Platform.OS === 'android' ? -10 : 0
-            },
-            
-        }}>
+            },  
+        }}
+        >
+
+            <Screen 
+                name='pools'
+                component={Pools}
+                options={{
+                    tabBarIcon: ({ color }) => <SoccerBall color={color} size={iconSize}/>,
+                    tabBarLabel: 'Meus Bolões'
+                }}
+            />
+
             <Screen 
                 name='new'
                 component={New}
@@ -41,12 +52,13 @@ export function AppRoutes() {
                     tabBarLabel: 'Novo Bolão'
                 }}
             />
+
             <Screen 
-                name='pools'
-                component={Pools}
+                name='infoscreen'
+                component={InfoScreen}
                 options={{
-                    tabBarIcon: ({ color }) => <SoccerBall color={color} size={iconSize}/>,
-                    tabBarLabel: 'Meus Bolões'
+                    tabBarIcon: ({ color }) => <Info color={color} size={iconSize}/>,
+                    tabBarLabel: 'Regras'
                 }}
             />
 
