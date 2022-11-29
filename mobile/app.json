@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "brappscopamobile",
+    "name": "Bolao Copa",
     "slug": "brappscopamobile",
     "scheme": "brappscopamobile",
     "version": "1.0.0",
@@ -22,6 +22,8 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.brappscopamobile",
+      "versionCode": 3,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
@@ -29,6 +31,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "8f53238a-3ad9-4ff2-8a7c-0824fc5f0793"
+      }
     }
   }
 }

@@ -28,10 +28,14 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
     const [isUserLoading, setIsUserLoading] = useState(false);
     const [user, setUser] = useState<UserProps>({} as UserProps);
 
+    //atenção para o androidClientId que é necessário para o apk
+    //para expo go usar -> clientId: process.env.GOOGLE_CLIENT_ID_GENERAL,
     const [request, response, promptAsync] = Google.useAuthRequest({
-        clientId: process.env.GOOGLE_CLIENT_ID,
+        
+        androidClientId: process.env.GOOGLE_CLIENT_ID_ANDROID,
         redirectUri: AuthSession.makeRedirectUri({ useProxy: true }),
         scopes: ["profile", "email"],
+        
     });
 
 
