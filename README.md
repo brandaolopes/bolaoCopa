@@ -32,6 +32,6 @@ Link to projects:
 
 ## 📝 License
 
-Esse projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+This project is under MIT license. Please note the [LICENSE](LICENSE) to see more details.
 
 ---
